@@ -4,6 +4,9 @@ RUN apt-get update
 
 # PHP extensions
 
+# PDO
+RUN docker-php-ext-install pdo_mysql
+
 # Zip (used to download packages with Composer)
 RUN apt-get install -y zlib1g-dev
 RUN docker-php-ext-install zip
