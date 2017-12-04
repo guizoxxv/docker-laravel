@@ -1,4 +1,4 @@
-FROM php:7.2.0-apache-stretch
+FROM php:7.1.12-apache-jessie
 
 RUN apt-get update
 
@@ -12,7 +12,7 @@ RUN docker-php-ext-install zip
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install nodejs (comes with npm)
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get update && apt-get install -y nodejs
 
 # Install Vim
