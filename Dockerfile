@@ -2,6 +2,11 @@ FROM php:7.1.12-apache-jessie
 
 RUN apt-get update
 
+# Libraries
+
+# PNG
+RUN apt-get install -y libpng-dev
+
 # PHP extensions
 
 # PDO
