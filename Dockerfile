@@ -1,30 +1,21 @@
 FROM php:7.2.3-apache-stretch
 
-RUN apt-get update
+RUN apt update
 
-# Libraries
-
-# PNG
-RUN apt-get install -y libpng-dev
+# Required for php zip extension; PNG; required to install node; vim
+RUN apt install -y zlib1g-dev libpng-dev gnupg vim
 
 # PHP extensions
 
-# PDO
-RUN docker-php-ext-install pdo_mysql
-
-# Zip (used to download packages with Composer)
-RUN apt-get install -y zlib1g-dev
-RUN docker-php-ext-install zip
+# PDO; Zip (used to download packages with Composer)
+RUN docker-php-ext-install pdo_mysql zip
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install nodejs (comes with npm)
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
-RUN apt-get update && apt-get install -y nodejs
-
-# Install Vim
-RUN apt-get install -y vim
+RUN apt update && apt-get install -y nodejs
 
 # Change Apache root path
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
@@ -37,5 +28,5 @@ RUN a2enmod rewrite
 COPY apache2.conf /etc/apache2/apache2.conf
 
 # Cleanup
-RUN apt-get clean
-RUN apt-get autoclean
+RUN apt clean
+RUN apt autoclean
