@@ -2,13 +2,17 @@ FROM php:7.2.3-apache-stretch
 
 RUN apt update
 
-# Required for php zip extension; PNG; required to install node; vim; required for postgres
-RUN apt install -y zlib1g-dev libpng-dev gnupg vim libpq-dev
+# Required for php zip extension; png; node; vim; postgres; gd; gd;
+RUN apt install -y zlib1g-dev libpng-dev gnupg vim libpq-dev libfreetype6-dev libjpeg62-turbo-dev
 
 # PHP extensions
 
-# PDO; Zip (used to download packages with Composer)
+# pdo; mysql; postgres; zip (used to download packages with Composer);
 RUN docker-php-ext-install pdo_mysql pdo_pgsql zip
+
+# GD (Image library)
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-install -j$(nproc) gd
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
