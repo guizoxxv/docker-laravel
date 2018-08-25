@@ -1,14 +1,12 @@
-FROM php:7.2.3-apache-stretch
+FROM php:7.2.9-apache-stretch
 
 RUN apt update
 
-# Required for php zip extension; png; node; vim; postgres; gd; gd;
-RUN apt install -y zlib1g-dev libpng-dev gnupg vim libpq-dev libfreetype6-dev libjpeg62-turbo-dev
+# Required for unzip; php zip extension; png; node; vim; postgres; gd; gd;
+RUN apt install -y unzip zlib1g-dev libpng-dev gnupg vim libpq-dev libfreetype6-dev libjpeg62-turbo-dev cron
 
-# PHP extensions
-
-# pdo; mysql; postgres; zip (used to download packages with Composer);
-RUN docker-php-ext-install pdo_mysql pdo_pgsql zip
+# PHP extensions - pdo; mysql; zip (used to download packages with Composer);
+RUN docker-php-ext-install pdo_mysql zip
 
 # GD (Image library)
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
@@ -21,16 +19,26 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt update && apt-get install -y nodejs
 
-# Change Apache root path
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/conf-available/*.conf
+# Copy custom apache virtual host configuration into container
+COPY vhost.conf /etc/apache2/sites-available/000-default.conf
+
+# Copy start stript into container
+COPY start.sh /usr/local/bin/start
+
+# Set apache folder permission
+RUN chown -R www-data:www-data /var/www/html
 
 # Activate Apache mod_rewrite
 RUN a2enmod rewrite
-# Replace apache2.conf with custom
-COPY apache2.conf /etc/apache2/apache2.conf
+
+# Set up the scheduler for Laravel
+RUN echo '* * * * * cd /var/www/html && /usr/local/bin/php artisan schedule:run >> /dev/null 2>&1' | crontab -
+
+# Set start script permission
+RUN chmod u+x /usr/local/bin/start
 
 # Cleanup
 RUN apt clean
 RUN apt autoclean
+
+CMD ["/usr/local/bin/start"]
