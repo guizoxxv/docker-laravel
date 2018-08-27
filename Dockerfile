@@ -5,8 +5,8 @@ RUN apt update
 # Required for unzip; php zip extension; png; node; vim; postgres; gd; gd;
 RUN apt install -y unzip zlib1g-dev libpng-dev gnupg vim libpq-dev libfreetype6-dev libjpeg62-turbo-dev cron
 
-# PHP extensions - pdo; mysql; zip (used to download packages with Composer);
-RUN docker-php-ext-install pdo_mysql zip
+# PHP extensions - pdo; mysql; zip (used to download packages with Composer); mbstring;
+RUN docker-php-ext-install pdo_mysql zip mbstring
 
 # GD (Image library)
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
