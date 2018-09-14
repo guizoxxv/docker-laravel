@@ -2,8 +2,8 @@ FROM php:7.2.9-apache-stretch
 
 RUN apt update
 
-# Required for unzip; php zip extension; png; node; vim; postgres; gd; gd;
-RUN apt install -y unzip zlib1g-dev libpng-dev gnupg vim libpq-dev libfreetype6-dev libjpeg62-turbo-dev cron
+# Required for zip; php zip extension; png; node; vim; postgres; gd; gd;
+RUN apt install -y zip zlib1g-dev libpng-dev gnupg vim libpq-dev libfreetype6-dev libjpeg62-turbo-dev cron
 
 # PHP extensions - pdo; mysql; zip (used to download packages with Composer); mbstring;
 RUN docker-php-ext-install pdo_mysql zip mbstring
