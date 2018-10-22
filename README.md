@@ -1,2 +1,2 @@
 # docker-laravel
-Docker image for Laravel.
+Docker image for PHP applications optimized for Laravel framework.
