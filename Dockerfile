@@ -2,8 +2,8 @@ FROM php:7.2.9-apache-stretch
 
 RUN apt update
 
-# Required for zip; php zip extension; png; node; vim; postgres; gd; gd;
-RUN apt install -y zip zlib1g-dev libpng-dev gnupg vim libpq-dev libfreetype6-dev libjpeg62-turbo-dev cron
+# Required for zip; php zip extension; png; node; vim; gd; gd;
+RUN apt install -y zip zlib1g-dev libpng-dev gnupg vim libfreetype6-dev libjpeg62-turbo-dev cron
 
 # PHP extensions - pdo; mysql; zip (used to download packages with Composer); mbstring;
 RUN docker-php-ext-install pdo_mysql zip mbstring
@@ -20,7 +20,7 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt update && apt-get install -y nodejs
 
 # Copy custom apache virtual host configuration into container
-COPY vhost.conf /etc/apache2/sites-available/000-default.conf
+COPY apache.conf /etc/apache2/sites-available/000-default.conf
 
 # Copy start stript into container
 COPY start.sh /usr/local/bin/start
