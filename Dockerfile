@@ -1,8 +1,10 @@
-FROM php:7.2.9-apache-stretch
+FROM php:7.2-apache
+
+ENV APACHE_DOCUMENT_ROOT ${APACHE_DOCUMENT_ROOT:-/var/www/html/public}
 
 RUN apt update
 
-# Required for zip; php zip extension; png; node; vim; gd; gd;
+# Required for zip; php zip extension; png; node; vim; gd; gd; cron;
 RUN apt install -y zip zlib1g-dev libpng-dev gnupg vim libfreetype6-dev libjpeg62-turbo-dev cron
 
 # PHP extensions - pdo; mysql; zip (used to download packages with Composer); mbstring;
