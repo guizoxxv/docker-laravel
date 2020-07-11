@@ -1,4 +1,4 @@
-FROM php:7.2-apache
+FROM php:7.3-apache
 
 ENV APACHE_DOCUMENT_ROOT ${APACHE_DOCUMENT_ROOT:-/var/www/html/public}
 
@@ -10,7 +10,7 @@ RUN apt install -y zip zlib1g-dev libpng-dev gnupg vim libfreetype6-dev libjpeg6
 # PHP extensions - pdo-mysql; zip (used to download packages with Composer); mbstring; exif
 RUN docker-php-ext-install pdo_mysql zip mbstring exif
 
-# GD (image library)
+# PHP extension - GD (image library)
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
 RUN docker-php-ext-install gd
 
