@@ -7,17 +7,17 @@ RUN apt update
 # Required for zip; php zip extension; png; node; vim; gd; gd; cron;
 RUN apt install -y zip zlib1g-dev libpng-dev gnupg vim libfreetype6-dev libjpeg62-turbo-dev cron
 
-# PHP extensions - pdo-mysql; zip (used to download packages with Composer); mbstring;
-RUN docker-php-ext-install pdo_mysql zip mbstring
+# PHP extensions - pdo-mysql; zip (used to download packages with Composer); mbstring; exif
+RUN docker-php-ext-install pdo_mysql zip mbstring exif
 
-# GD (Image library)
+# GD (image library)
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
-RUN docker-php-ext-install -j$(nproc) gd
+RUN docker-php-ext-install gd
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Install nodejs (comes with npm)
+# Install Node.js
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt install -y nodejs
 
