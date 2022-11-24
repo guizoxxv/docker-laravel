@@ -1,4 +1,4 @@
-FROM php:8-apache
+FROM php:8.1-apache
 
 ENV APACHE_DOCUMENT_ROOT ${APACHE_DOCUMENT_ROOT:-/var/www/html/public}
 
@@ -18,7 +18,7 @@ RUN docker-php-ext-install gd
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_19.x | bash -
 RUN apt-get install -y nodejs
 
 # Copy custom apache virtual host configuration into container
