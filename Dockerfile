@@ -4,8 +4,8 @@ ENV APACHE_DOCUMENT_ROOT ${APACHE_DOCUMENT_ROOT:-/var/www/html/public}
 
 RUN apt-get update
 
-# Required for zip; php zip extension; node; vim; php mbstring extension; cron;
-RUN apt-get install -y zip libzip-dev gnupg vim libonig-dev cron
+# Required for zip; php zip extension; vim; php mbstring extension; cron;
+RUN apt-get install -y zip libzip-dev vim libonig-dev cron
 
 # PHP extensions - pdo-mysql; zip (used to download packages with Composer); exif
 RUN docker-php-ext-install pdo_mysql zip mbstring exif
@@ -14,10 +14,10 @@ RUN docker-php-ext-install pdo_mysql zip mbstring exif
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install Node.js
-RUN curl -SLO https://deb.nodesource.com/nsolid_setup_deb.sh
-RUN chmod 500 nsolid_setup_deb.sh
-RUN ./nsolid_setup_deb.sh 20
-RUN apt-get install nodejs -y
+RUN apt-get install -y gnupg
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+  && apt-get install -y nodejs
+RUN apt-get remove -y gnupg
 
 # Copy custom apache virtual host configuration into container
 COPY apache.conf /etc/apache2/sites-available/000-default.conf
@@ -38,6 +38,7 @@ RUN echo '* * * * * cd /var/www/html && /usr/local/bin/php artisan schedule:run 
 RUN chmod u+x /usr/local/bin/start
 
 # Cleanup
+RUN rm -rf /var/lib/apt/lists/*
 RUN apt-get clean
 RUN apt-get autoclean
 
