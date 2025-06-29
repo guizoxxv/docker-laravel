@@ -40,6 +40,5 @@ RUN chmod u+x /usr/local/bin/start
 # Cleanup
 RUN rm -rf /var/lib/apt/lists/*
 RUN apt-get clean
-RUN apt-get autoclean
 
 CMD ["/usr/local/bin/start"]
